@@ -37,7 +37,7 @@ def PS_set_voltage(self, voltage, unit_):
     #Guard Clause
     if unit_ != "mV" or "V":
         return False
-    if voltage > 20:
+    if voltage > 20 or voltage < 0:
         return False
     #SET VOLTAGE FUNCTION: VOLT 1.00V for example
     self.write("VOLT " + voltage + unit_ + "\n".encode())
@@ -62,7 +62,7 @@ def PS_set_limit_current(self, current, unit_):
     #Guard Clause
     if unit_ != "mA" or "A":
         return False
-    if current > 5:
+    if current > 5 or current < 0:
         return False
     #SET VOLTAGE FUNCTION: VOLT 1.00V for example
     self.write("CURR " + current + unit_ + "\n".encode())
@@ -122,7 +122,7 @@ With checking if it really powered the power supply up!
 """
 def PS_power_switch(self, state):
     #Guard Clause
-    if state != "ON" or "OFF":
+    if state != "ON" or state != "OFF":
         return False
     self.write("OUTP " + state  +"\n".encode())
     self.write("OUTP ?".encode())
