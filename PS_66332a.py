@@ -132,10 +132,16 @@ def PS_power_switch(self, state):
     else:
         return result 
 
+"""
+Returns the state of the output voltage.
+If ON return True if OFF return False
+"""
 def PS_power_switch_state(self):
     self.write("OUTP ?".encode())
     result = self.readline()
     if result == 0:
         return True
+    elif result == 1:
+        return False
     else:
         return result
