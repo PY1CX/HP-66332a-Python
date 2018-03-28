@@ -1,14 +1,13 @@
-import DMM_34401a as dmm
+import PS_66332a as ps
 import time
 
 #Init the DMM with the Serial port
-dmm0 = dmm.DMM_init("/dev/ttyUSB0")
-f = open("data.txt", "a+")
+ps0 = ps.PS_init("/dev/ttyUSB0")
 time.sleep(1)
-while True:
+ps.PS_power_switch(ps0, '1')
+for x in range(1, 15):
+    ps.PS_set_voltage(ps0, x)
+    print(float(ps.PS_read_voltage_set(ps0)))
     time.sleep(2)
-    x  = dmm.DMM_read_float(dmm0)
-    f.write(str(x) + '\n')
-    print(x)
-
-
+ps.PS_close(ps0)
+    

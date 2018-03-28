@@ -2,7 +2,11 @@ import serial
 import time
 import re
 
-""" 66332a Power Supply Driver Class """
+"""
+ 66332a Power Supply Driver Class
+ Author: Felipe Navarro
+"""
+
 """
 Based on the SCPI command list on: 
 http://www.manson.com.hk/getimage3/index/action/images/name/SDP_SCPI_command_list_1_2.pdf
@@ -15,8 +19,8 @@ def PS_init(port_number):
                         baudrate = 9600,
                         parity = serial.PARITY_NONE,
                         stopbits = serial.STOPBITS_TWO,
-                        bytesize = serial.EIGHTBITS,
-                        xonxoff=True)
+                        bytesize = serial.EIGHTBITS)
+                        #xonxoff  = True)
                         #xonxoff=True
     time.sleep(0.5)
     if ser.isOpen() == True:
@@ -33,14 +37,12 @@ def PS_close(self):
 """
 Voltage Set Function
 """
-def PS_set_voltage(self, voltage, unit_):
+def PS_set_voltage(self, voltage):
     #Guard Clause
-    if unit_ != "mV" or "V":
-        return False
     if voltage > 20 or voltage < 0:
         return False
     #SET VOLTAGE FUNCTION: VOLT 1.00V for example
-    self.write("VOLT " + voltage + unit_ + "\n".encode())
+    self.write("VOLT " + str(voltage) + "\n".encode())
     return True
 
 """
@@ -49,7 +51,7 @@ Voltage Set Read Function
 def PS_read_voltage_set(self):
     self.write("VOLT?\n".encode())
     result = self.readline()
-    regex = re.compile('[0-9][.][0-9]*[VmV]')
+    regex = re.compile('[0-9]*[.][0-9]*[VmV]')
     if re.findall(regex, result) >= 1:
         return result
     else:
@@ -105,7 +107,7 @@ def PS_read_current(self):
         return False
 
 """
-Actual POWER consumption read function
+Actual POWER consumption read functionhttps://www.edx.org/
 """
 def PS_read_power(self):
     self.write("MEAS:POW?\n".encode())
@@ -122,15 +124,16 @@ With checking if it really powered the power supply up!
 """
 def PS_power_switch(self, state):
     #Guard Clause
-    if state != "ON" or state != "OFF":
-        return False
+    #if state != "0" or state != "1":
+    #    return False
     self.write("OUTP " + state  +"\n".encode())
+    """
     self.write("OUTP ?".encode())
     result = self.readline()
     if result == 0:
         return True
     else:
-        return result 
+        return result """
 
 """
 Returns the state of the output voltage.
